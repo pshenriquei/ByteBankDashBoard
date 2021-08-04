@@ -1,2 +1,2 @@
 # ByteBankDashBoard
- Projeto de um banco com DashBoard em Flutter
+ Projeto de uma lista de contatos com DashBoard em Flutter
