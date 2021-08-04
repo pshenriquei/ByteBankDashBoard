@@ -1,25 +1,58 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:projects/database/dao/contact_dao.dart';
 import 'package:projects/models/contact.dart';
 import 'package:projects/screens/contact_form.dart';
 
-class ContactsList extends StatelessWidget {
+class ContactsList extends StatefulWidget {
+  @override
+  _ContactsListState createState() => _ContactsListState();
+}
 
-  final List<Contact> contacts = [];
+final ContactDao _dao = ContactDao();
 
+class _ContactsListState extends State<ContactsList> {
   @override
   Widget build(BuildContext context) {
-    contacts.add(Contact(0, 'Pedro', 1000));
     return Scaffold(
       appBar: AppBar(
         title: Text('Contacts'),
       ),
-      body: ListView.builder(
-        itemBuilder: (context, index){
-          final Contact contact = contacts[index];
-          return _ContactItem(contact);
+      body: FutureBuilder<List<Contact>>(
+        initialData: [],
+        future: _dao.findAll(),
+        builder: (context, snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.none:
+              break;
+
+            case ConnectionState.waiting:
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    CircularProgressIndicator(),
+                    Text('Loading'),
+                  ],
+                ),
+              );
+
+            case ConnectionState.active:
+              break;
+
+            case ConnectionState.done:
+              final List<Contact>? contacts = snapshot.data as List<Contact>;
+              return ListView.builder(
+                itemBuilder: (context, index) {
+                  final Contact contact = contacts![index];
+                  return _ContactItem(contact);
+                },
+                itemCount: contacts!.length,
+              );
+          }
+          return Text('Unknown error');
         },
-        itemCount: contacts.length,
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -29,9 +62,7 @@ class ContactsList extends StatelessWidget {
                   builder: (context) => ContactForm(),
                 ),
               )
-              .then(
-                (newContact) => debugPrint(newContact.toString()),
-              );
+              .then((value) => {setState(() {})});
         },
         child: Icon(
           Icons.add,
@@ -41,9 +72,9 @@ class ContactsList extends StatelessWidget {
   }
 }
 
-class _ContactItem extends StatelessWidget{
-
+class _ContactItem extends StatelessWidget {
   final Contact contact;
+
   _ContactItem(this.contact);
 
   @override
