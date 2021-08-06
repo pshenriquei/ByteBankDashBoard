@@ -4,6 +4,10 @@ import 'package:projects/database/dao/contact_dao.dart';
 import 'package:projects/models/contact.dart';
 import 'package:projects/screens/contact_form.dart';
 
+const _titleAppBarTransfer = 'Transfer';
+const _loading = 'Loading...';
+const _error = 'Unknown error';
+
 class ContactsList extends StatefulWidget {
   @override
   _ContactsListState createState() => _ContactsListState();
@@ -16,7 +20,7 @@ class _ContactsListState extends State<ContactsList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Contacts'),
+        title: Text(_titleAppBarTransfer),
       ),
       body: FutureBuilder<List<Contact>>(
         initialData: [],
@@ -33,7 +37,7 @@ class _ContactsListState extends State<ContactsList> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     CircularProgressIndicator(),
-                    Text('Loading'),
+                    Text(_loading),
                   ],
                 ),
               );
@@ -51,7 +55,7 @@ class _ContactsListState extends State<ContactsList> {
                 itemCount: contacts!.length,
               );
           }
-          return Text('Unknown error');
+          return Text(_error);
         },
       ),
       floatingActionButton: FloatingActionButton(

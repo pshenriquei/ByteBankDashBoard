@@ -1,6 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.br.psobrinho.projects">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
    <application
+       android:usesCleartextTraffic="true"
         android:label="ByetBankDashBoard"
         android:icon="@mipmap/ic_launcher">
         <activity
