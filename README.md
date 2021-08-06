@@ -1,2 +1,2 @@
 # ByteBankDashBoard
- Projeto de um banco com DashBoard em Flutter
+ Projeto prototipo de um Banco com DashBoard em Flutter
