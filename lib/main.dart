@@ -1,11 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:projects/http/web_client.dart';
+import 'package:projects/models/contact.dart';
+import 'package:projects/models/transaction.dart';
 import 'package:projects/screens/dashboard.dart';
 
 void main() {
   runApp(ByteBankApp());
-  findAll();
 }
 
 class ByteBankApp extends StatelessWidget {
