@@ -36,7 +36,7 @@ class DashBoard extends StatelessWidget {
                 _FeatureItem(
                   _titleBtTransactionFeed,
                   Icons.description,
-                  onClick: () => _showTrancactionList(context),
+                  onClick: () => _showTransactionList(context),
                 ),
               ],
             ),
@@ -54,7 +54,7 @@ class DashBoard extends StatelessWidget {
     );
   }
 
-  _showTrancactionList(BuildContext context) {
+  _showTransactionList(BuildContext context) {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => TransactionsList(),
