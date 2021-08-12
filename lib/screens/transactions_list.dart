@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:projects/components/centered_message.dart';
 import 'package:projects/components/progress.dart';
-import 'package:projects/http/webclients/transaction_webclient.dart';
+import 'package:projects/http/web_client.dart';
 import 'package:projects/models/transaction.dart';
 
 const _titleAppBarTransactions = 'Transactions';
 const _error = 'Unknown error';
 
 class TransactionsList extends StatelessWidget {
-
-  final TransactionWebClient _webClient = TransactionWebClient();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,56 +15,59 @@ class TransactionsList extends StatelessWidget {
         title: Text(_titleAppBarTransactions),
       ),
       body: FutureBuilder<List<Transaction>>(
-        future: _webClient.findAll(),
-        builder: (context, snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.none:
-              break;
+          future: findAll(),
+          builder: (context, snapshot) {
 
-            case ConnectionState.waiting:
-              return Progress();
+            switch (snapshot.connectionState) {
+              case ConnectionState.none:
+                break;
 
-            case ConnectionState.active:
-              break;
+              case ConnectionState.waiting:
+                return Progress();
 
-            case ConnectionState.done:
-              if (snapshot.hasData) {
-                final List<Transaction>? transactions = snapshot.data;
-                if (transactions!.isNotEmpty) {
-                  return ListView.builder(
-                    itemBuilder: (context, index) {
-                      final Transaction transaction = transactions[index];
-                      return Card(
-                        child: ListTile(
-                          leading: Icon(Icons.monetization_on),
-                          title: Text(
-                            'Valor transferido:' + transaction.value.toString(),
-                            style: TextStyle(
-                              fontSize: 20.0,
-                              fontWeight: FontWeight.bold,
+              case ConnectionState.active:
+                break;
+
+              case ConnectionState.done:
+
+                if(snapshot.hasData){
+                  final List<Transaction>? transactions = snapshot.data;
+                  if (transactions!.isNotEmpty){
+                    return ListView.builder(
+                      itemBuilder: (context, index) {
+                        final Transaction transaction = transactions[index];
+                        return Card(
+                          child: ListTile(
+                            leading: Icon(Icons.monetization_on),
+                            title: Text(
+                              'Valor transferido:'+ transaction.value.toString(),
+                              style: TextStyle(
+                                fontSize: 20.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            subtitle: Text(
+                              'Conta destino:' + transaction.contact.accountNumber.toString(),
+                              style: TextStyle(
+                                fontSize: 16.0,
+                              ),
                             ),
                           ),
-                          subtitle: Text(
-                            'Conta destino:' +
-                                transaction.contact.accountNumber.toString(),
-                            style: TextStyle(
-                              fontSize: 16.0,
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                    itemCount: transactions.length,
-                  );
+                        );
+                      },
+                      itemCount: transactions.length,
+                    );
+                  }
                 }
-              }
-              return CenteredMessage(
-                'No transactions Found',
-                icon: Icons.warning,
-              );
-          }
-          return CenteredMessage(_error, icon: Icons.error);
-        },
+                  return CenteredMessage(
+                    'No transactions Found',
+                    icon: Icons.warning,
+                  );
+            }
+            return CenteredMessage(
+              _error,
+              icon: Icons.error);
+          },
       ),
     );
   }
