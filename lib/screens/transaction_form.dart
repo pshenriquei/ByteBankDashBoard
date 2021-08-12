@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:projects/http/web_client.dart';
+import 'package:projects/http/webclients/transaction_webclient.dart';
 import 'package:projects/models/contact.dart';
 import 'package:projects/models/transaction.dart';
 
@@ -14,6 +14,7 @@ class TransactionForm extends StatefulWidget {
 
 class _TransactionFormState extends State<TransactionForm> {
   final TextEditingController _valueController = TextEditingController();
+  final TransactionWebClient _webClient = TransactionWebClient();
 
   @override
   Widget build(BuildContext context) {
@@ -57,13 +58,16 @@ class _TransactionFormState extends State<TransactionForm> {
                 child: SizedBox(
                   width: double.maxFinite,
                   child: ElevatedButton(
-                    child: Text('Transfer'), onPressed: () {
-                      final double? value = double.tryParse(_valueController.text);
-                      final transactionCreated = Transaction(value!, widget.contact);
-                      save(transactionCreated).then((transaction){
-                       Navigator.pop(context);
+                    child: Text('Transfer'),
+                    onPressed: () {
+                      final double? value =
+                          double.tryParse(_valueController.text);
+                      final transactionCreated =
+                          Transaction(value!, widget.contact);
+                      _webClient.save(transactionCreated).then((transaction) {
+                        Navigator.pop(context);
                       });
-                  },
+                    },
                   ),
                 ),
               )
