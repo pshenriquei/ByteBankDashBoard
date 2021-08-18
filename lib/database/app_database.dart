@@ -10,6 +10,6 @@ Future<Database> getDataBase() async {
       db.execute(ContactDao.tableSql);
     },
     version: 1,
-    //  onDowngrade: onDatabaseDowngradeDelete,   //limpar banco de dados, apenas subir o numero da versão, executar e depois descer novamente,  exemplo de 1 p/ 2 e de 2 p/ 1.
+    // onDowngrade: onDatabaseDowngradeDelete,   //limpar banco de dados, apenas subir o numero da versão, executar e depois descer novamente,  exemplo de 1 p/ 2 e de 2 p/ 1.
   );
 }

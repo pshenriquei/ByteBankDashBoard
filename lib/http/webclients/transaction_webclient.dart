@@ -17,24 +17,31 @@ class TransactionWebClient {
 
   Future<Transaction?> save(Transaction transaction, String password) async {
     final String transactionJson = jsonEncode(transaction.toJson());
-
+    
     final Response? response = await client.post(uri,
       headers: {
         'Content-type': 'application/json',
         'password': password,
       },
       body: transactionJson,);
-    
+
     if (response!.statusCode == 200) {
       return Transaction.fromJson(jsonDecode(response.body));
     }
-    throw HttpException(_statusCodeResponse[response.statusCode]!);
+    throw HttpException(_getMessage(response.statusCode));
+  }
+
+  String _getMessage(int statusCode) {
+    if(_statusCodeResponse.containsKey(statusCode)){
+      return _statusCodeResponse[statusCode]!;
+    }
+    return 'Unknown Error!';
   }
 
   static final Map<int, String> _statusCodeResponse = {
     400: 'There was an error submitting transaction',
     401: 'Authentication Failed',
-    409: "transaction already exists",
+    409: "Transaction already exists",
   };
 }
 

@@ -6,6 +6,7 @@ import 'package:projects/components/transaction_auth_dialog.dart';
 import 'package:projects/http/webclients/transaction_webclient.dart';
 import 'package:projects/models/contact.dart';
 import 'package:projects/models/transaction.dart';
+import 'package:uuid/uuid.dart';
 
 class TransactionForm extends StatefulWidget {
   final Contact contact;
@@ -19,6 +20,7 @@ class TransactionForm extends StatefulWidget {
 class _TransactionFormState extends State<TransactionForm> {
   final TextEditingController _valueController = TextEditingController();
   final TransactionWebClient _webClient = TransactionWebClient();
+  final String transactionId = Uuid().v4();
 
   @override
   Widget build(BuildContext context) {
@@ -66,8 +68,11 @@ class _TransactionFormState extends State<TransactionForm> {
                     onPressed: () {
                       final double value =
                           double.tryParse(_valueController.text) ?? 0;
-                      final transactionCreated =
-                          Transaction(value, widget.contact);
+                      final transactionCreated = Transaction(
+                        value,
+                        widget.contact,
+                        transactionId,
+                      );
                       showDialog(
                           context: context,
                           builder: (contextDialog) {

@@ -27,6 +27,7 @@ dependencies:
   path:
   http: ^0.13.3
   http_interceptor:
+  uuid:
 
 
   # The following adds the Cupertino Icons font to your application.

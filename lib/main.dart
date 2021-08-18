@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:projects/screens/dashboard.dart';
+import 'package:uuid/uuid.dart';
 
 void main() {
   runApp(ByteBankApp());
