@@ -7,5 +7,5 @@ final Client client = InterceptedClient.build(
   interceptors: [LoggingInterceptor()],
 );
 
-const String baseUrl = 'de2114f55563.ngrok.io';
+const String baseUrl = '13c9c4ff9029.ngrok.io';
 const String baseUrlRepositorio = 'transactions';
