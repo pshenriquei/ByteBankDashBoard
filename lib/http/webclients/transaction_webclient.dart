@@ -9,7 +9,7 @@ final Uri uri = Uri.http(baseUrl, baseUrlRepositorio);
 class TransactionWebClient {
   Future<List<Transaction>> findAll() async {
     final Response response =
-      await client.get(uri).timeout(Duration(seconds: 5));
+        await client.get(uri).timeout(Duration(seconds: 5));
     final List<dynamic> decodedJson = jsonDecode(response.body);
     return decodedJson
         .map((dynamic json) => Transaction.fromJson(json))
@@ -23,8 +23,20 @@ class TransactionWebClient {
         headers: {
           'Content-type': 'application/json',
           'password': password,
-        }, body: transactionJson);
+        },
+        body: transactionJson);
 
-    return Transaction.fromJson(jsonDecode(response.body));
+    if (response.statusCode == 200) {
+      return Transaction.fromJson(jsonDecode(response.body));
+    }
+    _throwHttpError(response.statusCode);
   }
+
+  void _throwHttpError(int statusCode) =>
+      throw Exception(_statusCodeResponse[statusCode]);
+
+  static final Map<int, String> _statusCodeResponse = {
+    400: 'There was an error submitting transaction',
+    401: 'Authentication Failed',
+  };
 }
