@@ -5,6 +5,7 @@ import 'interceptors/loggin_interceptor.dart';
 
 final Client client = InterceptedClient.build(
   interceptors: [LoggingInterceptor()],
+  requestTimeout: Duration(seconds: 5),
 );
 
 const String baseUrl = 'e04aea800248.ngrok.io';
