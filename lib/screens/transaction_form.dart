@@ -137,19 +137,18 @@ class _TransactionFormState extends State<TransactionForm> {
     });
     final Transaction? transaction =
         await _webClient.save(transactionCreated, password).catchError((e) {
+      print('Erro aqui: $e');
       _showFailureMessage(context, message: e.message);
     }, test: (e) => e is HttpException).catchError((e) {
       _showFailureMessage(context, message: 'Timeout submitting transaction');
     }, test: (e) => e is TimeoutException).catchError((e) {
       _showFailureMessage(context);
-    }).whenComplete((){
+    }).whenComplete(() {
       setState(() {
         _sending = false;
       });
-        });
-    
-    
-    
+    });
+
     return transaction;
   }
 
