@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:projects/components/progress.dart';
 import 'package:projects/components/response_dialog.dart';
@@ -137,11 +138,26 @@ class _TransactionFormState extends State<TransactionForm> {
     });
     final Transaction? transaction =
         await _webClient.save(transactionCreated, password).catchError((e) {
-      print('Erro aqui: $e');
+      FirebaseCrashlytics.instance.setCustomKey('Exception', e.toString());
+      FirebaseCrashlytics.instance
+          .setCustomKey('Http_body', transactionCreated.toString());
+      FirebaseCrashlytics.instance.recordError(e, null);
+
       _showFailureMessage(context, message: e.message);
     }, test: (e) => e is HttpException).catchError((e) {
+      FirebaseCrashlytics.instance.setCustomKey('Exception', e.toString());
+      FirebaseCrashlytics.instance.setCustomKey('Htpp_code', e.statusCode);
+      FirebaseCrashlytics.instance
+          .setCustomKey('Http_body', transactionCreated.toString());
+      FirebaseCrashlytics.instance.recordError(e, null);
+
       _showFailureMessage(context, message: 'Timeout submitting transaction');
     }, test: (e) => e is TimeoutException).catchError((e) {
+      FirebaseCrashlytics.instance.setCustomKey('Exception', e.toString());
+      FirebaseCrashlytics.instance
+          .setCustomKey('Http_body', transactionCreated.toString());
+      FirebaseCrashlytics.instance.recordError(e, null);
+
       _showFailureMessage(context);
     }).whenComplete(() {
       setState(() {
