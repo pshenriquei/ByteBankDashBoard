@@ -2,12 +2,14 @@ import 'dart:async';
 
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
+import 'package:giffy_dialog/giffy_dialog.dart';
 import 'package:projects/components/progress.dart';
 import 'package:projects/components/response_dialog.dart';
 import 'package:projects/components/transaction_auth_dialog.dart';
 import 'package:projects/http/webclients/transaction_webclient.dart';
 import 'package:projects/models/contact.dart';
 import 'package:projects/models/transaction.dart';
+import 'package:toast/toast.dart';
 import 'package:uuid/uuid.dart';
 
 class TransactionForm extends StatefulWidget {
@@ -23,12 +25,13 @@ class _TransactionFormState extends State<TransactionForm> {
   final TextEditingController _valueController = TextEditingController();
   final TransactionWebClient _webClient = TransactionWebClient();
   final String transactionId = Uuid().v4();
-
   bool _sending = false;
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         title: Text('New transaction'),
       ),
@@ -138,25 +141,31 @@ class _TransactionFormState extends State<TransactionForm> {
     });
     final Transaction? transaction =
         await _webClient.save(transactionCreated, password).catchError((e) {
-      FirebaseCrashlytics.instance.setCustomKey('Exception', e.toString());
-      FirebaseCrashlytics.instance
-          .setCustomKey('Http_body', transactionCreated.toString());
-      FirebaseCrashlytics.instance.recordError(e, null);
+      if (FirebaseCrashlytics.instance.isCrashlyticsCollectionEnabled) {
+        FirebaseCrashlytics.instance.setCustomKey('Exception', e.toString());
+        FirebaseCrashlytics.instance
+            .setCustomKey('Http_body', transactionCreated.toString());
+        FirebaseCrashlytics.instance.recordError(e, null);
+      }
 
       _showFailureMessage(context, message: e.message);
     }, test: (e) => e is HttpException).catchError((e) {
-      FirebaseCrashlytics.instance.setCustomKey('Exception', e.toString());
-      FirebaseCrashlytics.instance.setCustomKey('Htpp_code', e.statusCode);
-      FirebaseCrashlytics.instance
-          .setCustomKey('Http_body', transactionCreated.toString());
-      FirebaseCrashlytics.instance.recordError(e, null);
+      if (FirebaseCrashlytics.instance.isCrashlyticsCollectionEnabled) {
+        FirebaseCrashlytics.instance.setCustomKey('Exception', e.toString());
+        FirebaseCrashlytics.instance.setCustomKey('Htpp_code', e.statusCode);
+        FirebaseCrashlytics.instance
+            .setCustomKey('Http_body', transactionCreated.toString());
+        FirebaseCrashlytics.instance.recordError(e, null);
+      }
 
       _showFailureMessage(context, message: 'Timeout submitting transaction');
     }, test: (e) => e is TimeoutException).catchError((e) {
-      FirebaseCrashlytics.instance.setCustomKey('Exception', e.toString());
-      FirebaseCrashlytics.instance
-          .setCustomKey('Http_body', transactionCreated.toString());
-      FirebaseCrashlytics.instance.recordError(e, null);
+      if (FirebaseCrashlytics.instance.isCrashlyticsCollectionEnabled) {
+        FirebaseCrashlytics.instance.setCustomKey('Exception', e.toString());
+        FirebaseCrashlytics.instance
+            .setCustomKey('Http_body', transactionCreated.toString());
+        FirebaseCrashlytics.instance.recordError(e, null);
+      }
 
       _showFailureMessage(context);
     }).whenComplete(() {
@@ -173,9 +182,32 @@ class _TransactionFormState extends State<TransactionForm> {
     String message = 'Unknown Error',
   }) {
     showDialog(
-        context: context,
-        builder: (contextDialog) {
-          return FailureDialog(message);
-        });
+      context: context,
+      builder: (_) => NetworkGiffyDialog(
+        image: Image.asset('images/error-windows.gif'),
+        title: Text('Ops...',
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 22.0, fontWeight: FontWeight.w600)),
+        description: Text(message, textAlign: TextAlign.center),
+        entryAnimation: EntryAnimation.TOP,
+        onOkButtonPressed: () {},
+
+      ),
+    );
+
+    // showToast(message,gravity: Toast.BOTTOM);
+
+    // final snackBar = SnackBar(content: Text(message));
+    // _scaffoldKey.currentState!.showSnackBar(snackBar);
+
+    // showDialog(
+    //     context: context,
+    //     builder: (contextDialog) {
+    //       return FailureDialog(message);
+    //     });
+  }
+
+  void showToast(String msg, {int duration = 5, int? gravity}) {
+    Toast.show(msg, context, duration: duration, gravity: gravity);
   }
 }
