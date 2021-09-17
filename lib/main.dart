@@ -2,10 +2,13 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:projects/screens/dashboard.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:projects/screens/counter.dart';
+import 'package:projects/screens/name.dart';
+
+import 'components/theme.dart';
 
 void main() async {
-
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
@@ -13,18 +16,23 @@ void main() async {
   runApp(ByteBankApp());
 }
 
+class LogObserver extends BlocObserver{
+  @override
+  void onChange(BlocBase bloc, Change change) {
+    print("${bloc.runtimeType} > $change");
+    super.onChange(bloc, change);
+  }
+}
+
 class ByteBankApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+
+
+    Bloc.observer = LogObserver();
     return MaterialApp(
-      theme: ThemeData(
-          primaryColor: Colors.green[900],
-          accentColor: Colors.blueAccent[700],
-          buttonTheme: ButtonThemeData(
-            buttonColor: Colors.blueAccent[700],
-            textTheme: ButtonTextTheme.primary,
-          )),
-      home: DashBoard(),
+      theme: byteBankTheme,
+      home: NameContainer(),
     );
   }
 }
