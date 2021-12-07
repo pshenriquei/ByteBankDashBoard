@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:projects/components/container.dart';
+import 'package:projects/models/name.dart';
 import 'package:projects/screens/contacts_list.dart';
 import 'package:projects/screens/name.dart';
 import 'package:projects/screens/transactions_list.dart';
@@ -9,7 +11,7 @@ const _titleBtTransfer = 'Transfer';
 const _titleChangeName = 'Change Name';
 const _titleBtTransactionFeed = 'Transaction Feed';
 
-class DashBoardContainer extends StatelessWidget {
+class DashBoardContainer extends BlocContainer {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -68,10 +70,9 @@ class DashBoardView extends StatelessWidget {
   }
 
   void _showContactsList(BuildContext blocContext) {
-    Navigator.of(blocContext).push(
-      MaterialPageRoute(
-        builder: (context) => ContactsList(),
-      ),
+    push(
+      blocContext,
+      ContactsListContainer(),
     );
   }
 

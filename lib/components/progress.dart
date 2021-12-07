@@ -13,13 +13,30 @@ class Progress extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
-        children:<Widget> [
+        children: <Widget>[
           CircularProgressIndicator(),
           Padding(
             padding: const EdgeInsets.only(top: 8.0),
-            child: Text(message, style: TextStyle(fontSize: 16.0),),
+            child: Text(
+              message,
+              style: TextStyle(fontSize: 16.0),
+            ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class ProgressView extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Processing'),
+      ),
+      body: Progress(
+        message: 'Sending...',
       ),
     );
   }
