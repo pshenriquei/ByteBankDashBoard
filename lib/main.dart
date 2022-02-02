@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:projects/screens/dashboard.dart';
 
+import 'components/localization.dart';
 import 'components/theme.dart';
 
 void main() async {
@@ -29,7 +30,9 @@ class ByteBankApp extends StatelessWidget {
     Bloc.observer = LogObserver();
     return MaterialApp(
       theme: byteBankTheme,
-      home: DashBoardContainer(),
+      home: LocalizationContainer(
+        child: DashBoardContainer(),
+      ),
     );
   }
 }

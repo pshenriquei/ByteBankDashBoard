@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:projects/components/container.dart';
+import 'package:projects/components/localization.dart';
 import 'package:projects/models/name.dart';
 import 'package:projects/screens/contacts_list.dart';
 import 'package:projects/screens/name.dart';
@@ -24,9 +25,10 @@ class DashBoardContainer extends BlocContainer {
 class DashBoardView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final name = context.read<NameCubit>().state;
+    final i18n = DashBoardViewI18N(context);
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Theme.of(context).primaryColor,
         title: BlocBuilder<NameCubit, String>(
           builder: (context, state) => Text('Welcome $state'),
         ),
@@ -46,17 +48,17 @@ class DashBoardView extends StatelessWidget {
                 scrollDirection: Axis.horizontal,
                 children: [
                   _FeatureItem(
-                    _titleBtTransfer,
+                    i18n.transfer.toString(),
                     Icons.monetization_on,
                     onClick: () => _showContactsList(context),
                   ),
                   _FeatureItem(
-                    _titleBtTransactionFeed,
+                    i18n.transaction_feed.toString(),
                     Icons.description,
                     onClick: () => _showTransactionList(context),
                   ),
                   _FeatureItem(
-                    _titleChangeName,
+                    i18n.change_name.toString(),
                     Icons.person_outline,
                     onClick: () => _showChangeName(context),
                   ),
@@ -94,6 +96,16 @@ class DashBoardView extends StatelessWidget {
       ),
     );
   }
+}
+
+class DashBoardViewI18N extends ViewI18N {
+  DashBoardViewI18N(BuildContext context) : super(context);
+
+  String? get transfer => localize({"pt-br": "Transferir", "en": "$_titleBtTransfer"});
+
+  String? get transaction_feed => localize({"pt-br": "Transações", "en": "$_titleBtTransactionFeed"});
+
+  String? get change_name => localize({"pt-br": "Mudar nome", "en": "$_titleChangeName"});
 }
 
 class _FeatureItem extends StatelessWidget {
