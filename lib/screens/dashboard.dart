@@ -53,12 +53,12 @@ class DashBoardView extends StatelessWidget {
                     onClick: () => _showContactsList(context),
                   ),
                   _FeatureItem(
-                    i18n.transaction_feed.toString(),
+                    i18n.transactionFeed.toString(),
                     Icons.description,
                     onClick: () => _showTransactionList(context),
                   ),
                   _FeatureItem(
-                    i18n.change_name.toString(),
+                    i18n.changeName.toString(),
                     Icons.person_outline,
                     onClick: () => _showChangeName(context),
                   ),
@@ -103,9 +103,9 @@ class DashBoardViewI18N extends ViewI18N {
 
   String? get transfer => localize({"pt-br": "Transferir", "en": "$_titleBtTransfer"});
 
-  String? get transaction_feed => localize({"pt-br": "Transações", "en": "$_titleBtTransactionFeed"});
+  String? get transactionFeed => localize({"pt-br": "Transações", "en": "$_titleBtTransactionFeed"});
 
-  String? get change_name => localize({"pt-br": "Mudar nome", "en": "$_titleChangeName"});
+  String? get changeName => localize({"pt-br": "Mudar nome", "en": "$_titleChangeName"});
 }
 
 class _FeatureItem extends StatelessWidget {

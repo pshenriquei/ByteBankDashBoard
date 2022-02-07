@@ -8,5 +8,5 @@ final Client client = InterceptedClient.build(
   requestTimeout: Duration(seconds: 5),
 );
 
-const String baseUrl = '24a2-179-218-1-154.ngrok.io';
+const String baseUrl = '4bd1-179-218-1-154.ngrok.io';
 const String baseUrlRepositorio = 'transactions';
