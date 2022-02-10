@@ -17,15 +17,20 @@ class DashBoardContainer extends BlocContainer {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => NameCubit("Pedro"),
-      child: DashBoardView(),
+      child: I18NLoadingContainer(
+        (messages) => DashBoardView(DashBoardViewLazyI18N(messages)),
+      ),
     );
   }
 }
 
 class DashBoardView extends StatelessWidget {
+
+  final DashBoardViewLazyI18N _i18n;
+  DashBoardView(this._i18n);
+
   @override
   Widget build(BuildContext context) {
-    final i18n = DashBoardViewI18N(context);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
@@ -48,17 +53,17 @@ class DashBoardView extends StatelessWidget {
                 scrollDirection: Axis.horizontal,
                 children: [
                   _FeatureItem(
-                    i18n.transfer.toString(),
+                    _i18n.transfer.toString(),
                     Icons.monetization_on,
                     onClick: () => _showContactsList(context),
                   ),
                   _FeatureItem(
-                    i18n.transactionFeed.toString(),
+                    _i18n.transactionFeed.toString(),
                     Icons.description,
                     onClick: () => _showTransactionList(context),
                   ),
                   _FeatureItem(
-                    i18n.changeName.toString(),
+                    _i18n.changeName.toString(),
                     Icons.person_outline,
                     onClick: () => _showChangeName(context),
                   ),
@@ -96,6 +101,16 @@ class DashBoardView extends StatelessWidget {
       ),
     );
   }
+}
+
+class DashBoardViewLazyI18N{
+
+  final I18NMessages _messages;
+  DashBoardViewLazyI18N(this._messages);
+
+  String? get transfer => _messages.get(_titleBtTransfer);
+  String? get transactionFeed => _messages.get(_titleBtTransactionFeed);
+  String? get changeName => _messages.get(_titleChangeName);
 }
 
 class DashBoardViewI18N extends ViewI18N {
