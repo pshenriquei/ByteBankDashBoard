@@ -62,6 +62,12 @@ class ContactsListContainer extends BlocContainer {
       child: ContactsList(dao),
     );
   }
+
+  @override
+  State<StatefulWidget> createState() {
+    // TODO: implement createState
+    throw UnimplementedError();
+  }
 }
 
 class ContactsList extends StatelessWidget {

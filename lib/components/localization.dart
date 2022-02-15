@@ -65,13 +65,20 @@ class LoadedI18NMessagesState extends I18NMessagesState {
 }
 
 class I18NMessages {
-
   final Map<String, String> _messages;
+
   I18NMessages(this._messages);
 
-  String? get(String key) {
-    assert(_messages.containsKey(key));
-    return _messages[(key)];
+  String get(String key) {
+    for (final getMessage in _messages.entries)
+    if (getMessage.key.contains(key)) {
+      return getMessage.value;
+      // return _messages.keys.firstWhere((element) => element == key,
+      // orElse: () => 'No key found'); // FUNCIONA MAS PEGA A KEY E NAO O VALOR
+          //.values.firstWhere((element) => element == key,
+          //orElse: () => 'No key found'); // naõ preenche os campos
+    }
+    return "";
   }
 }
 

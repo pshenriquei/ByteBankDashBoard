@@ -8,25 +8,22 @@ import 'package:projects/screens/contacts_list.dart';
 import 'package:projects/screens/name.dart';
 import 'package:projects/screens/transactions_list.dart';
 
-const _titleBtTransfer = 'Transfer';
-const _titleChangeName = 'Change Name';
-const _titleBtTransactionFeed = 'Transaction Feed';
-
 class DashBoardContainer extends BlocContainer {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => NameCubit("Pedro"),
       child: I18NLoadingContainer(
-        (messages) => DashBoardView(DashBoardViewLazyI18N(messages)),
+        (messages) =>
+            DashBoardView(DashBoardViewLazyI18N(messages)), // erro aqui
       ),
     );
   }
 }
 
 class DashBoardView extends StatelessWidget {
-
   final DashBoardViewLazyI18N _i18n;
+
   DashBoardView(this._i18n);
 
   @override
@@ -53,17 +50,17 @@ class DashBoardView extends StatelessWidget {
                 scrollDirection: Axis.horizontal,
                 children: [
                   _FeatureItem(
-                    _i18n.transfer.toString(),
+                    _i18n.transfer,
                     Icons.monetization_on,
                     onClick: () => _showContactsList(context),
                   ),
                   _FeatureItem(
-                    _i18n.transactionFeed.toString(),
+                    _i18n.transaction_feed,
                     Icons.description,
                     onClick: () => _showTransactionList(context),
                   ),
                   _FeatureItem(
-                    _i18n.changeName.toString(),
+                    _i18n.change_name,
                     Icons.person_outline,
                     onClick: () => _showChangeName(context),
                   ),
@@ -103,24 +100,28 @@ class DashBoardView extends StatelessWidget {
   }
 }
 
-class DashBoardViewLazyI18N{
-
+class DashBoardViewLazyI18N {
   final I18NMessages _messages;
+
   DashBoardViewLazyI18N(this._messages);
 
-  String? get transfer => _messages.get(_titleBtTransfer);
-  String? get transactionFeed => _messages.get(_titleBtTransactionFeed);
-  String? get changeName => _messages.get(_titleChangeName);
+  String get transfer => _messages.get("transfer");
+
+  String get transaction_feed => _messages.get("transaction_feed");
+
+  String get change_name => _messages.get("change_name");
 }
 
 class DashBoardViewI18N extends ViewI18N {
   DashBoardViewI18N(BuildContext context) : super(context);
 
-  String? get transfer => localize({"pt-br": "Transferir", "en": "$_titleBtTransfer"});
+  String? get transfer => localize({"pt-br": "Transferir", "en": "Transfer"});
 
-  String? get transactionFeed => localize({"pt-br": "Transações", "en": "$_titleBtTransactionFeed"});
+  String? get transaction_feed =>
+      localize({"pt-br": "Transações", "en": "Transaction Feed"});
 
-  String? get changeName => localize({"pt-br": "Mudar nome", "en": "$_titleChangeName"});
+  String? get change_name =>
+      localize({"pt-br": "Mudar nome", "en": "Change Name"});
 }
 
 class _FeatureItem extends StatelessWidget {
